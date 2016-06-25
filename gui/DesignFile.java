@@ -398,6 +398,11 @@ public class DesignFile
 
     public void update_eagle(BoardFrame p_board_frame)
     {
+        update_eagle(p_board_frame, false);
+    }
+
+    public void update_eagle(BoardFrame p_board_frame, boolean write_rules_confirmed)
+    {
         final java.util.ResourceBundle resources =
                 java.util.ResourceBundle.getBundle("gui.resources.BoardMenuFile", p_board_frame.get_locale());
         String design_file_name = get_name();
@@ -444,7 +449,7 @@ public class DesignFile
                 p_board_frame.screen_messages.set_status_message(resources.getString("message_16") + " " + output_file_name + " " + resources.getString("message_7"));
             }
         }
-        if (WindowMessage.confirm(resources.getString("confirm")))
+        if (write_rules_confirmed || WindowMessage.confirm(resources.getString("confirm")))
         {
             write_rules_file(design_name, p_board_frame.board_panel.board_handling);
         }

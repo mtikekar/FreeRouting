@@ -46,6 +46,7 @@ public class BoardMenuFile extends javax.swing.JMenu
                 public void actionPerformed(java.awt.event.ActionEvent evt)
                 {
                     boolean save_ok = file_menu.board_frame.save();
+                    file_menu.board_frame.design_file.update_eagle(file_menu.board_frame, true);
                     file_menu.board_frame.board_panel.board_handling.close_files();
                     if (save_ok)
                     {
@@ -74,6 +75,7 @@ public class BoardMenuFile extends javax.swing.JMenu
                     else
                     {
                         file_menu.board_frame.save();
+                        file_menu.board_frame.design_file.update_eagle(file_menu.board_frame, true);
                     }
                     file_menu.board_frame.dispose();
                 }

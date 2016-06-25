@@ -150,7 +150,7 @@ public class BoardFrame extends javax.swing.JFrame
         this.scroll_pane.setViewportView(board_panel);
         
         this.setTitle(resources.getString("title"));
-        this.addWindowListener(new WindowStateListener());
+        this.addWindowListener(new WindowStateListener(this));
         
         this.pack();
     }
@@ -742,8 +742,15 @@ public class BoardFrame extends javax.swing.JFrame
     
     private class WindowStateListener extends java.awt.event.WindowAdapter
     {
+        public BoardFrame board_frame = null;
+
+        public WindowStateListener (BoardFrame p_board_frame) {
+            board_frame = p_board_frame;
+        }
+
         public void windowClosing(java.awt.event.WindowEvent evt)
         {
+            board_frame.design_file.update_eagle(board_frame, true);
             setDefaultCloseOperation(DISPOSE_ON_CLOSE );
             if (confirm_cancel)
             {
