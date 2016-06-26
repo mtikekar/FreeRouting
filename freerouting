@@ -1,0 +1,26 @@
+#!/bin/bash
+
+usage='Free software for Printed Circuit Board Routing.
+Homepage: www.freerouting.net
+
+Usage:
+ freerouting : starts the application which prompts for design file
+ freerouting design.dsn : starts the application with the design
+ freerouting -h | --help : shows this help'
+
+case $# in
+  0) ;;
+  1) case $1 in
+         -h|--help) help=1 ;;
+         *) design="$1" ;;
+     esac ;;
+  *) help=1 ;;
+esac
+
+jar="${BASH_SOURCE[0]}"
+jar="$( readlink -f "$jar" )"
+jar="$( dirname "$jar" )/fr.jar"
+
+[[ -n "$help" ]] && echo "$usage" && exit 0
+[[ -n "$design" ]] && exec java -jar $jar -de "$design"
+exec java -jar $jar
