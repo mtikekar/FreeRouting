@@ -973,9 +973,18 @@ string Wiring_d() {
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // ULP execution starts here
 #require 6.00.00;
-string msg = ";<center>Eagle2freerouter.ulp version " + version;
-msg += "<br><br><b>If you changed the DRC parameters, save your board before proceeding</b>";
-if (dlgMessageBox(msg, "Create DSN file", "Stop") == 1) exit(0);
+string menu_cmd;
+sprintf(menu_cmd, "menu \'Freerouting: write; run %s frommenu;\';", argv[0]);
+
+if (argc == 1) {
+    string msg = ";<center>Eagle2freerouter.ulp version " + version;
+    msg += "<br><br><b>If you changed the DRC parameters, save your board before proceeding</b>";
+    if (dlgMessageBox(msg, "Proceed", "Stop") == 1) exit(menu_cmd);
+}
+else {
+    menu_cmd = "";
+}
+
 get_designrules();  // get the DRC parameters from the .brd file
 if (par_value("layerSetup")< 0) ERROR("layer definition not found in BRD file");
 default_wire_width = par_value("msWidth");
@@ -1021,23 +1030,30 @@ if (strlen(DSN_output_file)) {
 		printf(Wiring_d());				// SPECCTRA Wiring and net.via descriptors
 		printf(")");					// Closing bracket to complete SPECCTRA PCB description
 		};
-		dlgDialog("DSN output file location:") {
-		string dummy;
-		dlgLabel(DSN_output_file);
-        dlgPushButton("Start freerouting") dlgAccept();
-		dlgPushButton("-done") exit(0);
-		};
+
+        if (argc == 1) {
+            dlgDialog("DSN output file location:") {
+                string dummy;
+                dlgLabel(DSN_output_file);
+                dlgPushButton("Start freerouting") dlgAccept();
+                dlgPushButton("-done") exit(menu_cmd);
+            };
+        }
 
         string cmd;
-        sprintf(cmd, "java -jar %s/fr.jar -de %s > freerouting.log", filedir(argv[0]), DSN_output_file);
+        sprintf(cmd, "java -jar \"%s/fr.jar\" -de \"%s\" > freerouting.log", filedir(argv[0]), DSN_output_file);
         system(cmd);
 
         board(B) {
             string SCR_file = filesetext(B.name, ".scr");
-            if (dlgMessageBox("Update board from " + SCR_file + "?", "&Yes", "&No") == 0) {
-               exit("script " + SCR_file + ";");
+            string msg = "Update board from " + SCR_file + "?";
+            if (filetime(SCR_file) < filetime(DSN_output_file)) {
+                msg = msg + "<br><b>Caution: File seems to be old!</b>";
+            }
+            if (dlgMessageBox(msg, "&Yes", "&No") == 0) {
+               exit(menu_cmd + " script " + SCR_file + ";");
             }
         }
 	}
 	else ERROR("No DSN output file generated");
-exit(0);
+exit(menu_cmd);
