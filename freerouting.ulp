@@ -1,4 +1,7 @@
+#usage "Export board to DSN, run Freerouting, update board"
 //=====================================
+// eagle2freerouterV6-6.ulp from Freerouting forum with changes for
+// automatically running locally installed freerouting
 // Specctra DSN descriptor generator for CadSoft-Eagle board designs.
 // Acknowledging an earlier design by Thomas Kaeubler and Alfons Wirtz
 // Thanks to David Varley for finding the right Resolution settings.
@@ -8,6 +11,7 @@
 // Send bugs and comments to info@virtualsilicon.ch
 
 /* Modification history
+24 Jun 2016 - Run freerouting automatically
 29 May 2013 - Fixed the Resolution settings to avoid generating short 'mismatch' airwires.
 29 May 2013 - Added the ability to remove polygons before routing to avoid breaking their consistency and generating airwires.
 30 Sept 2013 - Fixed naming of the file that gets DRU values to work correctly on MacBook Pro
@@ -1020,8 +1024,20 @@ if (strlen(DSN_output_file)) {
 		dlgDialog("DSN output file location:") {
 		string dummy;
 		dlgLabel(DSN_output_file);
+        dlgPushButton("Start freerouting") dlgAccept();
 		dlgPushButton("-done") exit(0);
 		};
+
+        string cmd;
+        sprintf(cmd, "java -jar %s/fr.jar -de %s > freerouting.log", filedir(argv[0]), DSN_output_file);
+        system(cmd);
+
+        board(B) {
+            string SCR_file = filesetext(B.name, ".scr");
+            if (dlgMessageBox("Update board from " + SCR_file + "?", "&Yes", "&No") == 0) {
+               exit("script " + SCR_file + ";");
+            }
+        }
 	}
 	else ERROR("No DSN output file generated");
 exit(0);
