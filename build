@@ -2,8 +2,9 @@
 
 # Download and unzip jh.zip from http://www.freerouting.net/fen/download/file.php?id=147
 
-javac -classpath /usr/share/icedtea-web/netx.jar:/homes/mtikekar/src/FreeRouting/jh.jar `find -type f -name "*.java"`
-jar cfe fr.jar gui.MainApplication  `find -type f \( -name "*.class" -o -name "*.properties" \)`
+javac -classpath /usr/share/icedtea-web/netx.jar:jh.jar `find -type f -name "*.java"`
+cp jh.jar fr.jar
+jar ufe fr.jar gui.MainApplication `find -type f \( -name "*.class" -o -name "*.properties" \)` helpset/
 
 # To run:
 # java -jar fr.jar [-de design.dsn]
