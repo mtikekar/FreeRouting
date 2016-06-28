@@ -369,7 +369,7 @@ public class DesignFile
             {
                 java.io.File rules_file = new java.io.File(p_parent_name, rule_file_name);
                 java.io.InputStream input_stream = new java.io.FileInputStream(rules_file);
-                if (input_stream != null && dsn_file_generated_by_host && WindowMessage.confirm(p_confirm_message))
+                if (input_stream != null && dsn_file_generated_by_host /*&& WindowMessage.confirm(p_confirm_message)*/)
                 {
                     result = designformats.specctra.RulesFile.read(input_stream, p_design_name, p_board_handling);
                 }

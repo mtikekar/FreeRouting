@@ -189,6 +189,16 @@ public class RulesFile
         Structure.write_snap_angle(p_par.file, p_par.board.rules.get_trace_angle_restriction());
         AutorouteSettings.write_scope(p_par.file, p_par.autoroute_settings, 
                 p_par.board.layer_structure, p_par.identifier_type);
+
+        p_par.file.start_scope();
+        p_par.file.write("rule");
+        Double smd_to_turn_dist = p_par.coordinate_transform.board_to_dsn(p_par.board.rules.get_pin_edge_to_turn_dist());
+        p_par.file.new_line();
+        p_par.file.write("(clear ");
+        p_par.file.write(smd_to_turn_dist.toString());
+        p_par.file.write(" (type smd_to_turn_gap))");
+        p_par.file.end_scope();
+        /*
         // write the default rule using 0 as default layer.
         Rule.write_default_rule(p_par, 0);
         // write the via padstacks
@@ -203,6 +213,7 @@ public class RulesFile
         Network.write_via_infos(p_par.board.rules, p_par.file, p_par.identifier_type);
         Network.write_via_rules(p_par.board.rules, p_par.file, p_par.identifier_type);
         Network.write_net_classes(p_par);
+        */
         p_par.file.end_scope();
     }
     
