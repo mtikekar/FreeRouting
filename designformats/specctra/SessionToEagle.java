@@ -118,9 +118,9 @@ public class SessionToEagle extends javax.swing.JFrame
         
         this.out_file.write("GRID ");
         this.out_file.write(this.unit.toString());
-        this.out_file.write("\n");
-        this.out_file.write("SET WIRE_BEND 2\n");
-        this.out_file.write("SET OPTIMIZING OFF\n");
+        this.out_file.write(";\n");
+        this.out_file.write("SET WIRE_BEND 2;\n");
+        this.out_file.write("SET OPTIMIZING OFF;\n");
         
         // Activate all layers in Eagle.
         
@@ -155,7 +155,7 @@ public class SessionToEagle extends javax.swing.JFrame
         this.out_file.write(" ");
         this.out_file.write(max_y.toString());
         this.out_file.write(");\n");
-        this.out_file.write("RIPUP;\n");
+        this.out_file.write("RIPUP *;\n");
         
         // read the direct subscopes of the session scope
         for (;;)
@@ -197,7 +197,7 @@ public class SessionToEagle extends javax.swing.JFrame
             }
         }
         // Wird nur einmal am Ende benoetigt!
-        this.out_file.write("RATSNEST\n");
+        this.out_file.write("RATSNEST;\n");
         return true;
     }
     
