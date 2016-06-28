@@ -38,17 +38,9 @@ If you have further questions or want some feedback, please sent an Email to sup
 Additional steps for users of CadSoft-Eagle:
 ============================================
 
-1) Download the latest Eagle2freerouter ulp file
-
-2) Start Eagle and open in the control panel of Eagle for example the design my_design.brd.
-
-3) Choose in the Files pulldown-menu of Eagle the item "execute ULP" and select the Eagle2freerouter ulp file. A file with name my_design.dsn is generated.
-
-4) Start the router, push the "Open Your Own Design" button and select my_design.dsn in the file chooser.
-
-5) After making some changes to the design with the router select "export Eagle session script" in the Files pulldown-menu. A file with name my_design.scr is generated.
-
-6) Choose in the Files pulldown-menu of Eagle the item "execute Script" and select my_design.scr.
+1. Choose in the Files pulldown-menu of Eagle the item "execute ULP" and select the freerouting.ulp file. A file with name my_design.dsn is generated and opened in Freerouting.
+2. After making some changes to the design with the router, close the Freerouting window. A file with name my_design.scr is generated.
+3. Eagle should now prompt to run this file.
 
 
 Here are some instructions how to run the Freerouting project in the NetBeans IDE.
