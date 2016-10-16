@@ -8,3 +8,7 @@ jar ufe fr.jar gui.MainApplication `find -type f \( -name "*.class" -o -name "*.
 
 # To run:
 # java -jar fr.jar [-de design.dsn]
+# Or run the shell script: freerouting
+
+# To install for Eagle:
+# copy fr.jar and freerouting.ulp to install directory.

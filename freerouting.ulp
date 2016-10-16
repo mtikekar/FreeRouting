@@ -973,16 +973,14 @@ string Wiring_d() {
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // ULP execution starts here
 #require 6.00.00;
-string menu_cmd;
-sprintf(menu_cmd, "menu \'Freerouting: write; run %s frommenu;\';", argv[0]);
+
+if (!board) ERROR("Run this ULP in a Board window!");
 
 if (argc == 1) {
-    string msg = ";<center>Eagle2freerouter.ulp version " + version;
-    msg += "<br><br><b>If you changed the DRC parameters, save your board before proceeding</b>";
-    if (dlgMessageBox(msg, "Proceed", "Stop") == 1) exit(menu_cmd);
-}
-else {
-    menu_cmd = "";
+    dlgMessageBox("A 'Freerouting' button will be created in the menu. Use it to open the board in Freerouting.");
+    string menu_cmd;
+    sprintf(menu_cmd, "menu \'Freerouting: write; run %s frommenu;\';", argv[0]);
+    exit(menu_cmd);
 }
 
 get_designrules();  // get the DRC parameters from the .brd file
@@ -1031,29 +1029,20 @@ if (strlen(DSN_output_file)) {
 		printf(")");					// Closing bracket to complete SPECCTRA PCB description
 		};
 
-        if (argc == 1) {
-            dlgDialog("DSN output file location:") {
-                string dummy;
-                dlgLabel(DSN_output_file);
-                dlgPushButton("Start freerouting") dlgAccept();
-                dlgPushButton("-done") exit(menu_cmd);
-            };
-        }
-
         string cmd;
         sprintf(cmd, "java -jar \"%s/fr.jar\" -de \"%s\" > freerouting.log", filedir(argv[0]), DSN_output_file);
         system(cmd);
 
         board(B) {
             string SCR_file = filesetext(B.name, ".scr");
-            string msg = "Update board from " + SCR_file + "?";
+            string msg = "Import changes to the board from Freerouting?";
             if (filetime(SCR_file) < filetime(DSN_output_file)) {
-                msg = msg + "<br><b>Caution: File seems to be old!</b>";
+                msg = msg + "<br><b>Caution: The changes file " + SCR_file + " seems to be old!</b>";
             }
             if (dlgMessageBox(msg, "&Yes", "&No") == 0) {
-               exit(menu_cmd + " script " + SCR_file + ";");
+               exit("script " + SCR_file + ";");
             }
         }
 	}
 	else ERROR("No DSN output file generated");
-exit(menu_cmd);
+exit(0);
